@@ -1,111 +1,86 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-.quiz{padding:4vw;width:100%;font-family:'Outfit',sans-serif}
-.q-counter{font-family:'Outfit',sans-serif;font-size:clamp(12px,1.6vw,14px);color:var(--color-text-secondary);margin-bottom:clamp(8px,1.2vw,12px)}
-.q-text{font-family:'Outfit',sans-serif;font-size:clamp(16px,2.4vw,20px);font-weight:500;color:var(--color-text-primary);line-height:1.5;margin-bottom:clamp(14px,2vw,22px)}
-.options{display:flex;flex-direction:column;gap:clamp(8px,1.2vw,12px)}
-.opt{display:flex;align-items:flex-start;gap:clamp(10px,1.5vw,14px);padding:clamp(12px,1.8vw,15px) clamp(12px,2vw,18px);border:1.5px solid var(--color-border-tertiary);border-radius:10px;cursor:pointer;background:var(--color-background-primary);transition:border-color 0.15s,background 0.15s;width:100%}
+html,body{width:100%;margin:0;padding:0}
+*{box-sizing:border-box;font-family:'Outfit',sans-serif}
+.wrap{width:100%;padding:5% 6%}
+.counter{font-size:max(14px,1.6vw);color:#888;margin-bottom:2%}
+.qtext{font-size:max(18px,2.2vw);font-weight:500;color:#1a1a1a;line-height:1.5;margin-bottom:4%}
+.opts{display:flex;flex-direction:column;gap:max(10px,1.4vw)}
+.opt{display:flex;align-items:center;gap:max(10px,1.4vw);padding:max(12px,1.6vw) max(14px,2vw);border:1.5px solid #ddd;border-radius:10px;cursor:pointer;background:#fff;transition:all 0.15s}
 .opt:hover{border-color:#9d78c4;background:#f7f4fc}
-.opt.selected{border-color:#724b9e;background:#f0ebf8}
-.opt.correct{border-color:#1D9E75;background:#E1F5EE;cursor:default}
-.opt.wrong{border-color:#D85A30;background:#FAECE7;cursor:default}
-.opt.disabled{cursor:default}
-.opt-letter{width:clamp(26px,3.5vw,32px);height:clamp(26px,3.5vw,32px);border-radius:50%;background:#ede8f5;color:#724b9e;font-family:'Outfit',sans-serif;font-size:clamp(12px,1.6vw,15px);font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.opt.correct .opt-letter{background:#9FE1CB;color:#0F6E56}
-.opt.wrong .opt-letter{background:#F5C4B3;color:#993C1D}
-.opt-text{font-family:'Outfit',sans-serif;font-size:clamp(16px,2vw,17px);color:var(--color-text-primary);line-height:1.45}
-.feedback{margin-top:clamp(10px,1.5vw,16px);padding:clamp(10px,1.5vw,14px) clamp(12px,2vw,18px);border-radius:8px;font-family:'Outfit',sans-serif;font-size:clamp(14px,1.8vw,15px);line-height:1.55;display:none;border-left:3px solid}
-.feedback.show{display:block}
-.feedback.correct{background:#E1F5EE;color:#0F6E56;border-color:#1D9E75}
-.feedback.wrong{background:#FAECE7;color:#993C1D;border-color:#D85A30}
-.btns{display:flex;gap:clamp(8px,1.2vw,12px);margin-top:clamp(14px,2vw,22px);flex-wrap:wrap;align-items:center}
-.btn{padding:clamp(9px,1.3vw,12px) clamp(16px,3vw,26px);border-radius:8px;font-family:'Outfit',sans-serif;font-size:clamp(14px,1.7vw,15px);font-weight:500;cursor:pointer;border:1.5px solid #724b9e;transition:all 0.15s;white-space:nowrap}
-.btn-primary{background:#724b9e;color:#fff}
-.btn-primary:hover{background:#5a3a82}
-.btn-outline{background:transparent;color:#724b9e}
-.btn-outline:hover{background:#f0ebf8}
-.page{display:none;width:100%}
-.page.active{display:block}
+.opt.sel{border-color:#724b9e;background:#f0ebf8}
+.opt.ok{border-color:#1D9E75;background:#E1F5EE;cursor:default}
+.opt.bad{border-color:#D85A30;background:#FAECE7;cursor:default}
+.opt.lock{cursor:default}
+.letter{width:max(28px,3vw);height:max(28px,3vw);border-radius:50%;background:#ede8f5;color:#724b9e;font-size:max(13px,1.5vw);font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt.ok .letter{background:#9FE1CB;color:#0F6E56}
+.opt.bad .letter{background:#F5C4B3;color:#993C1D}
+.opttext{font-size:max(16px,1.8vw);color:#1a1a1a;line-height:1.4}
+.fb{margin-top:max(12px,1.6vw);padding:max(10px,1.4vw) max(14px,1.8vw);border-radius:8px;font-size:max(15px,1.6vw);line-height:1.5;display:none;border-left:3px solid}
+.fb.show{display:block}
+.fb.ok{background:#E1F5EE;color:#0F6E56;border-color:#1D9E75}
+.fb.bad{background:#FAECE7;color:#993C1D;border-color:#D85A30}
+.btns{display:flex;gap:max(8px,1.2vw);margin-top:max(14px,2vw);flex-wrap:wrap}
+.btn{padding:max(10px,1.3vw) max(20px,3vw);border-radius:8px;font-size:max(15px,1.7vw);font-weight:500;cursor:pointer;border:1.5px solid #724b9e;transition:all 0.15s;white-space:nowrap}
+.btn-p{background:#724b9e;color:#fff}
+.btn-p:hover{background:#5a3a82}
+.btn-o{background:transparent;color:#724b9e}
+.btn-o:hover{background:#f0ebf8}
+.pg{display:none}
+.pg.on{display:block}
 </style>
 
-<div class="quiz">
-  <div id="p1" class="page active">
-    <div class="q-counter">Question 1 of 2</div>
-    <div class="q-text">What does the term "input" mean in the context of computing?</div>
-    <div class="options" id="opts1">
-      <div class="opt" onclick="sel(1,this,'A')"><div class="opt-letter">A</div><div class="opt-text">The result produced by a program after processing</div></div>
-      <div class="opt" onclick="sel(1,this,'B')"><div class="opt-letter">B</div><div class="opt-text">The data or values provided to a program for processing</div></div>
-      <div class="opt" onclick="sel(1,this,'C')"><div class="opt-letter">C</div><div class="opt-text">The set of instructions written in a programming language</div></div>
-      <div class="opt" onclick="sel(1,this,'D')"><div class="opt-letter">D</div><div class="opt-text">The process of finding and fixing errors in a program</div></div>
+<div class="wrap">
+  <div id="g1" class="pg on">
+    <div class="counter">Question 1 of 2</div>
+    <div class="qtext">What does the term "input" mean in the context of computing?</div>
+    <div class="opts" id="o1">
+      <div class="opt" onclick="pick(1,this,'A')"><div class="letter">A</div><div class="opttext">The result produced by a program after processing</div></div>
+      <div class="opt" onclick="pick(1,this,'B')"><div class="letter">B</div><div class="opttext">The data or values provided to a program for processing</div></div>
+      <div class="opt" onclick="pick(1,this,'C')"><div class="letter">C</div><div class="opttext">The set of instructions written in a programming language</div></div>
+      <div class="opt" onclick="pick(1,this,'D')"><div class="letter">D</div><div class="opttext">The process of finding and fixing errors in a program</div></div>
     </div>
-    <div class="feedback" id="fb1"></div>
+    <div class="fb" id="f1"></div>
     <div class="btns">
-      <button class="btn btn-primary" id="chk1" onclick="chk(1,'B','Correct. Input refers to the data or values provided to a program so that it can be processed to produce an output.','The correct answer is B. Input refers to the data or values provided to a program for processing — not the result, the instructions, or the debugging process.')">Check answer</button>
-      <button class="btn btn-outline" id="nxt1" style="display:none" onclick="go(2)">Next question →</button>
+      <button class="btn btn-p" id="c1" onclick="chk(1,'B','Correct. Input refers to the data or values provided to a program so that it can be processed to produce an output.','The correct answer is B. Input refers to the data or values provided to a program for processing.')">Check answer</button>
+      <button class="btn btn-o" id="n1" style="display:none" onclick="next(1,2)">Next question →</button>
     </div>
   </div>
 
-  <div id="p2" class="page">
-    <div class="q-counter">Question 2 of 2</div>
-    <div class="q-text">What is a computer program?</div>
-    <div class="options" id="opts2">
-      <div class="opt" onclick="sel(2,this,'A')"><div class="opt-letter">A</div><div class="opt-text">A set of instructions written in a programming language that a computer can execute</div></div>
-      <div class="opt" onclick="sel(2,this,'B')"><div class="opt-letter">B</div><div class="opt-text">A diagram that shows the logical steps needed to solve a problem</div></div>
-      <div class="opt" onclick="sel(2,this,'C')"><div class="opt-letter">C</div><div class="opt-text">A device used to store and process large amounts of data</div></div>
-      <div class="opt" onclick="sel(2,this,'D')"><div class="opt-letter">D</div><div class="opt-text">A method of representing an algorithm using plain English keywords</div></div>
+  <div id="g2" class="pg">
+    <div class="counter">Question 2 of 2</div>
+    <div class="qtext">What is a computer program?</div>
+    <div class="opts" id="o2">
+      <div class="opt" onclick="pick(2,this,'A')"><div class="letter">A</div><div class="opttext">A set of instructions written in a programming language that a computer can execute</div></div>
+      <div class="opt" onclick="pick(2,this,'B')"><div class="letter">B</div><div class="opttext">A diagram that shows the logical steps needed to solve a problem</div></div>
+      <div class="opt" onclick="pick(2,this,'C')"><div class="letter">C</div><div class="opttext">A device used to store and process large amounts of data</div></div>
+      <div class="opt" onclick="pick(2,this,'D')"><div class="letter">D</div><div class="opttext">A method of representing an algorithm using plain English keywords</div></div>
     </div>
-    <div class="feedback" id="fb2"></div>
+    <div class="fb" id="f2"></div>
     <div class="btns">
-      <button class="btn btn-primary" id="chk2" onclick="chk(2,'A','Correct. A computer program is a set of instructions written in a programming language that a computer can execute to perform a specific task.','The correct answer is A. A computer program is a set of instructions written in a programming language — not a diagram, a device, or a representation method.')">Check answer</button>
-      <button class="btn btn-outline" id="rty" style="display:none" onclick="retry()">↺ Try again</button>
+      <button class="btn btn-p" id="c2" onclick="chk(2,'A','Correct. A computer program is a set of instructions written in a programming language that a computer can execute.','The correct answer is A. A computer program is a set of instructions written in a programming language.')">Check answer</button>
+      <button class="btn btn-o" id="rt" style="display:none" onclick="reset()">↺ Try again</button>
     </div>
   </div>
 </div>
 
 <script>
-var s={1:null,2:null},lk={1:false,2:false};
-function sel(q,el,l){
-  if(lk[q])return;
-  s[q]=l;
-  document.querySelectorAll('#opts'+q+' .opt').forEach(function(o){o.classList.remove('selected')});
-  el.classList.add('selected');
-}
-function chk(q,ans,cMsg,wMsg){
-  if(!s[q])return;
-  lk[q]=true;
+var cur={1:null,2:null},lk={1:0,2:0};
+function pick(q,el,l){if(lk[q])return;cur[q]=l;document.querySelectorAll('#o'+q+' .opt').forEach(function(o){o.classList.remove('sel')});el.classList.add('sel');}
+function chk(q,ans,cm,wm){
+  if(!cur[q])return;lk[q]=1;
   var ls=['A','B','C','D'];
-  document.querySelectorAll('#opts'+q+' .opt').forEach(function(o,i){
-    o.classList.add('disabled');
-    if(ls[i]===ans){o.classList.add('correct');o.querySelector('.opt-letter').textContent='✓';}
-    else if(ls[i]===s[q]&&s[q]!==ans){o.classList.add('wrong');}
-  });
-  var fb=document.getElementById('fb'+q);
-  fb.className='feedback show '+(s[q]===ans?'correct':'wrong');
-  fb.textContent=s[q]===ans?cMsg:wMsg;
-  document.getElementById('chk'+q).style.display='none';
-  if(q===1){document.getElementById('nxt1').style.display='inline-block';}
-  else{document.getElementById('rty').style.display='inline-block';}
+  document.querySelectorAll('#o'+q+' .opt').forEach(function(o,i){o.classList.add('lock');if(ls[i]===ans){o.classList.add('ok');o.querySelector('.letter').textContent='✓';}else if(ls[i]===cur[q]&&cur[q]!==ans){o.classList.add('bad');}});
+  var f=document.getElementById('f'+q);f.className='fb show '+(cur[q]===ans?'ok':'bad');f.textContent=cur[q]===ans?cm:wm;
+  document.getElementById('c'+q).style.display='none';
+  document.getElementById(q===1?'n1':'rt').style.display='inline-block';
 }
-function go(n){
-  document.getElementById('p'+(n-1)).classList.remove('active');
-  document.getElementById('p'+n).classList.add('active');
-}
-function retry(){
-  s={1:null,2:null};lk={1:false,2:false};
-  [1,2].forEach(function(q){
-    document.querySelectorAll('#opts'+q+' .opt').forEach(function(o,i){
-      o.className='opt';
-      o.querySelector('.opt-letter').textContent=['A','B','C','D'][i];
-    });
-    var fb=document.getElementById('fb'+q);
-    fb.className='feedback';fb.textContent='';
-    document.getElementById('chk'+q).style.display='inline-block';
-  });
-  document.getElementById('nxt1').style.display='none';
-  document.getElementById('rty').style.display='none';
-  document.getElementById('p2').classList.remove('active');
-  document.getElementById('p1').classList.add('active');
+function next(a,b){document.getElementById('g'+a).classList.remove('on');document.getElementById('g'+b).classList.add('on');}
+function reset(){
+  cur={1:null,2:null};lk={1:0,2:0};
+  [1,2].forEach(function(q){document.querySelectorAll('#o'+q+' .opt').forEach(function(o,i){o.className='opt';o.querySelector('.letter').textContent=['A','B','C','D'][i];});var f=document.getElementById('f'+q);f.className='fb';f.textContent='';document.getElementById('c'+q).style.display='inline-block';});
+  document.getElementById('n1').style.display='none';document.getElementById('rt').style.display='none';
+  document.getElementById('g2').classList.remove('on');document.getElementById('g1').classList.add('on');
 }
 </script>
