@@ -1,152 +1,110 @@
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Outfit,sans-serif}
-.quiz{padding:1.5rem 0;max-width:680px}
-.page{display:none}
-.page.active{display:block}
-.q-label{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:sentencecase;color:#724b9e;margin-bottom:8px}
-.q-text{font-size:17px;font-weight:500;color:var(--color-text-primary);line-height:1.5;margin-bottom:1.25rem}
-.options{display:flex;flex-direction:column;gap:10px}
-.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1.5px solid var(--color-border-tertiary);border-radius:10px;cursor:pointer;background:var(--color-background-primary);transition:border-color 0.15s,background 0.15s}
+.quiz{padding:4vw;width:100%;font-family:'Outfit',sans-serif}
+.q-counter{font-family:'Outfit',sans-serif;font-size:clamp(12px,1.6vw,14px);color:var(--color-text-secondary);margin-bottom:clamp(8px,1.2vw,12px)}
+.q-text{font-family:'Outfit',sans-serif;font-size:clamp(16px,2.4vw,20px);font-weight:500;color:var(--color-text-primary);line-height:1.5;margin-bottom:clamp(14px,2vw,22px)}
+.options{display:flex;flex-direction:column;gap:clamp(8px,1.2vw,12px)}
+.opt{display:flex;align-items:flex-start;gap:clamp(10px,1.5vw,14px);padding:clamp(12px,1.8vw,15px) clamp(12px,2vw,18px);border:1.5px solid var(--color-border-tertiary);border-radius:10px;cursor:pointer;background:var(--color-background-primary);transition:border-color 0.15s,background 0.15s;width:100%}
 .opt:hover{border-color:#9d78c4;background:#f7f4fc}
 .opt.selected{border-color:#724b9e;background:#f0ebf8}
-.opt.correct{border-color:#1D9E75;background:#E1F5EE}
-.opt.wrong{border-color:#D85A30;background:#FAECE7}
-.opt-letter{width:28px;height:28px;border-radius:50%;background:#ede8f5;color:#724b9e;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt.correct{border-color:#1D9E75;background:#E1F5EE;cursor:default}
+.opt.wrong{border-color:#D85A30;background:#FAECE7;cursor:default}
+.opt.disabled{cursor:default}
+.opt-letter{width:clamp(26px,3.5vw,32px);height:clamp(26px,3.5vw,32px);border-radius:50%;background:#ede8f5;color:#724b9e;font-family:'Outfit',sans-serif;font-size:clamp(12px,1.6vw,15px);font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .opt.correct .opt-letter{background:#9FE1CB;color:#0F6E56}
 .opt.wrong .opt-letter{background:#F5C4B3;color:#993C1D}
-.opt-text{font-size:15px;color:var(--color-text-primary);line-height:1.4}
-.feedback{margin-top:14px;padding:12px 16px;border-radius:8px;font-size:14px;line-height:1.5;display:none}
+.opt-text{font-family:'Outfit',sans-serif;font-size:clamp(16px,2vw,17px);color:var(--color-text-primary);line-height:1.45}
+.feedback{margin-top:clamp(10px,1.5vw,16px);padding:clamp(10px,1.5vw,14px) clamp(12px,2vw,18px);border-radius:8px;font-family:'Outfit',sans-serif;font-size:clamp(14px,1.8vw,15px);line-height:1.55;display:none;border-left:3px solid}
 .feedback.show{display:block}
-.feedback.correct{background:#E1F5EE;color:#0F6E56;border-left:3px solid #1D9E75}
-.feedback.wrong{background:#FAECE7;color:#993C1D;border-left:3px solid #D85A30}
-.btns{display:flex;gap:10px;margin-top:1.5rem;flex-wrap:wrap}
-.btn{padding:10px 22px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid #724b9e;font-family:Outfit,sans-serif;transition:all 0.15s}
+.feedback.correct{background:#E1F5EE;color:#0F6E56;border-color:#1D9E75}
+.feedback.wrong{background:#FAECE7;color:#993C1D;border-color:#D85A30}
+.btns{display:flex;gap:clamp(8px,1.2vw,12px);margin-top:clamp(14px,2vw,22px);flex-wrap:wrap;align-items:center}
+.btn{padding:clamp(9px,1.3vw,12px) clamp(16px,3vw,26px);border-radius:8px;font-family:'Outfit',sans-serif;font-size:clamp(14px,1.7vw,15px);font-weight:500;cursor:pointer;border:1.5px solid #724b9e;transition:all 0.15s;white-space:nowrap}
 .btn-primary{background:#724b9e;color:#fff}
 .btn-primary:hover{background:#5a3a82}
 .btn-outline{background:transparent;color:#724b9e}
 .btn-outline:hover{background:#f0ebf8}
-.divider{height:1px;background:var(--color-border-tertiary);margin:1.5rem 0}
-.page-counter{font-size:12px;color:var(--color-text-secondary);margin-bottom:1.25rem}
+.page{display:none;width:100%}
+.page.active{display:block}
 </style>
 
 <div class="quiz">
   <div id="p1" class="page active">
-    <div class="page-counter">Question 1 of 2</div>
-    <div class="q-label">Prior knowledge check</div>
+    <div class="q-counter">Question 1 of 2</div>
     <div class="q-text">What does the term "input" mean in the context of computing?</div>
     <div class="options" id="opts1">
-      <div class="opt" onclick="select1(this,'A')"><div class="opt-letter">A</div><div class="opt-text">The result produced by a program after processing</div></div>
-      <div class="opt" onclick="select1(this,'B')"><div class="opt-letter">B</div><div class="opt-text">The data or values provided to a program for processing</div></div>
-      <div class="opt" onclick="select1(this,'C')"><div class="opt-letter">C</div><div class="opt-text">The set of instructions written in a programming language</div></div>
-      <div class="opt" onclick="select1(this,'D')"><div class="opt-letter">D</div><div class="opt-text">The process of finding and fixing errors in a program</div></div>
+      <div class="opt" onclick="sel(1,this,'A')"><div class="opt-letter">A</div><div class="opt-text">The result produced by a program after processing</div></div>
+      <div class="opt" onclick="sel(1,this,'B')"><div class="opt-letter">B</div><div class="opt-text">The data or values provided to a program for processing</div></div>
+      <div class="opt" onclick="sel(1,this,'C')"><div class="opt-letter">C</div><div class="opt-text">The set of instructions written in a programming language</div></div>
+      <div class="opt" onclick="sel(1,this,'D')"><div class="opt-letter">D</div><div class="opt-text">The process of finding and fixing errors in a program</div></div>
     </div>
     <div class="feedback" id="fb1"></div>
     <div class="btns">
-      <button class="btn btn-primary" onclick="check1()" id="check1btn">Check answer</button>
-      <button class="btn btn-outline" onclick="goToPage2()" id="next1btn" style="display:none">Next question →</button>
+      <button class="btn btn-primary" id="chk1" onclick="chk(1,'B','Correct. Input refers to the data or values provided to a program so that it can be processed to produce an output.','The correct answer is B. Input refers to the data or values provided to a program for processing — not the result, the instructions, or the debugging process.')">Check answer</button>
+      <button class="btn btn-outline" id="nxt1" style="display:none" onclick="go(2)">Next question →</button>
     </div>
   </div>
 
   <div id="p2" class="page">
-    <div class="page-counter">Question 2 of 2</div>
-    <div class="q-label">Prior knowledge check</div>
+    <div class="q-counter">Question 2 of 2</div>
     <div class="q-text">What is a computer program?</div>
     <div class="options" id="opts2">
-      <div class="opt" onclick="select2(this,'A')"><div class="opt-letter">A</div><div class="opt-text">A set of instructions written in a programming language that a computer can execute</div></div>
-      <div class="opt" onclick="select2(this,'B')"><div class="opt-letter">B</div><div class="opt-text">A diagram that shows the logical steps needed to solve a problem</div></div>
-      <div class="opt" onclick="select2(this,'C')"><div class="opt-letter">C</div><div class="opt-text">A device used to store and process large amounts of data</div></div>
-      <div class="opt" onclick="select2(this,'D')"><div class="opt-letter">D</div><div class="opt-text">A method of representing an algorithm using plain English keywords</div></div>
+      <div class="opt" onclick="sel(2,this,'A')"><div class="opt-letter">A</div><div class="opt-text">A set of instructions written in a programming language that a computer can execute</div></div>
+      <div class="opt" onclick="sel(2,this,'B')"><div class="opt-letter">B</div><div class="opt-text">A diagram that shows the logical steps needed to solve a problem</div></div>
+      <div class="opt" onclick="sel(2,this,'C')"><div class="opt-letter">C</div><div class="opt-text">A device used to store and process large amounts of data</div></div>
+      <div class="opt" onclick="sel(2,this,'D')"><div class="opt-letter">D</div><div class="opt-text">A method of representing an algorithm using plain English keywords</div></div>
     </div>
     <div class="feedback" id="fb2"></div>
     <div class="btns">
-      <button class="btn btn-primary" onclick="check2()" id="check2btn">Check answer</button>
-      <button class="btn btn-outline" onclick="retry()" id="retry2btn" style="display:none"><i class="ti ti-refresh" aria-hidden="true"></i> Try again</button>
+      <button class="btn btn-primary" id="chk2" onclick="chk(2,'A','Correct. A computer program is a set of instructions written in a programming language that a computer can execute to perform a specific task.','The correct answer is A. A computer program is a set of instructions written in a programming language — not a diagram, a device, or a representation method.')">Check answer</button>
+      <button class="btn btn-outline" id="rty" style="display:none" onclick="retry()">↺ Try again</button>
     </div>
   </div>
 </div>
 
 <script>
-var sel1=null,sel2=null,locked1=false,locked2=false;
-
-function select1(el,letter){
-  if(locked1)return;
-  sel1=letter;
-  document.querySelectorAll('#opts1 .opt').forEach(o=>o.classList.remove('selected'));
+var s={1:null,2:null},lk={1:false,2:false};
+function sel(q,el,l){
+  if(lk[q])return;
+  s[q]=l;
+  document.querySelectorAll('#opts'+q+' .opt').forEach(function(o){o.classList.remove('selected')});
   el.classList.add('selected');
 }
-
-function select2(el,letter){
-  if(locked2)return;
-  sel2=letter;
-  document.querySelectorAll('#opts2 .opt').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function check1(){
-  if(!sel1)return;
-  locked1=true;
-  var opts=document.querySelectorAll('#opts1 .opt');
-  var fb=document.getElementById('fb1');
-  opts.forEach(function(o,i){
-    var l=['A','B','C','D'][i];
-    if(l==='B'){o.classList.add('correct');o.querySelector('.opt-letter').textContent='✓'}
-    else if(l===sel1&&sel1!=='B'){o.classList.add('wrong')}
+function chk(q,ans,cMsg,wMsg){
+  if(!s[q])return;
+  lk[q]=true;
+  var ls=['A','B','C','D'];
+  document.querySelectorAll('#opts'+q+' .opt').forEach(function(o,i){
+    o.classList.add('disabled');
+    if(ls[i]===ans){o.classList.add('correct');o.querySelector('.opt-letter').textContent='✓';}
+    else if(ls[i]===s[q]&&s[q]!==ans){o.classList.add('wrong');}
   });
-  if(sel1==='B'){
-    fb.className='feedback show correct';
-    fb.textContent='Correct. Input refers to the data or values provided to a program so that it can be processed to produce an output.';
-  } else {
-    fb.className='feedback show wrong';
-    fb.textContent='The correct answer is B. Input refers to the data or values provided to a program for processing — not the result, the instructions, or the debugging process.';
-  }
-  document.getElementById('check1btn').style.display='none';
-  document.getElementById('next1btn').style.display='inline-block';
+  var fb=document.getElementById('fb'+q);
+  fb.className='feedback show '+(s[q]===ans?'correct':'wrong');
+  fb.textContent=s[q]===ans?cMsg:wMsg;
+  document.getElementById('chk'+q).style.display='none';
+  if(q===1){document.getElementById('nxt1').style.display='inline-block';}
+  else{document.getElementById('rty').style.display='inline-block';}
 }
-
-function check2(){
-  if(!sel2)return;
-  locked2=true;
-  var opts=document.querySelectorAll('#opts2 .opt');
-  var fb=document.getElementById('fb2');
-  opts.forEach(function(o,i){
-    var l=['A','B','C','D'][i];
-    if(l==='A'){o.classList.add('correct');o.querySelector('.opt-letter').textContent='✓'}
-    else if(l===sel2&&sel2!=='A'){o.classList.add('wrong')}
-  });
-  if(sel2==='A'){
-    fb.className='feedback show correct';
-    fb.textContent='Correct. A computer program is a set of instructions written in a programming language that a computer can execute to perform a specific task.';
-  } else {
-    fb.className='feedback show wrong';
-    fb.textContent='The correct answer is A. A computer program is a set of instructions written in a programming language — not a diagram, a device, or a representation method.';
-  }
-  document.getElementById('check2btn').style.display='none';
-  document.getElementById('retry2btn').style.display='inline-block';
+function go(n){
+  document.getElementById('p'+(n-1)).classList.remove('active');
+  document.getElementById('p'+n).classList.add('active');
 }
-
-function goToPage2(){
-  document.getElementById('p1').classList.remove('active');
-  document.getElementById('p2').classList.add('active');
-}
-
 function retry(){
-  sel1=null;sel2=null;locked1=false;locked2=false;
-  ['opts1','opts2'].forEach(function(id){
-    document.querySelectorAll('#'+id+' .opt').forEach(function(o){
-      o.classList.remove('selected','correct','wrong');
-      var l=o.querySelector('.opt-letter');
-      l.textContent=l.textContent==='✓'?['A','B','C','D'][Array.from(o.parentNode.children).indexOf(o)]:l.textContent;
+  s={1:null,2:null};lk={1:false,2:false};
+  [1,2].forEach(function(q){
+    document.querySelectorAll('#opts'+q+' .opt').forEach(function(o,i){
+      o.className='opt';
+      o.querySelector('.opt-letter').textContent=['A','B','C','D'][i];
     });
+    var fb=document.getElementById('fb'+q);
+    fb.className='feedback';fb.textContent='';
+    document.getElementById('chk'+q).style.display='inline-block';
   });
-  document.querySelectorAll('#opts1 .opt').forEach(function(o,i){o.querySelector('.opt-letter').textContent=['A','B','C','D'][i]});
-  document.querySelectorAll('#opts2 .opt').forEach(function(o,i){o.querySelector('.opt-letter').textContent=['A','B','C','D'][i]});
-  ['fb1','fb2'].forEach(function(id){var f=document.getElementById(id);f.className='feedback';f.textContent=''});
-  document.getElementById('check1btn').style.display='inline-block';
-  document.getElementById('next1btn').style.display='none';
-  document.getElementById('check2btn').style.display='inline-block';
-  document.getElementById('retry2btn').style.display='none';
+  document.getElementById('nxt1').style.display='none';
+  document.getElementById('rty').style.display='none';
   document.getElementById('p2').classList.remove('active');
   document.getElementById('p1').classList.add('active');
 }
